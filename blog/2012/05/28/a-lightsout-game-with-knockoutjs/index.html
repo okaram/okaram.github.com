@@ -100,7 +100,9 @@
 
 <p>Our model will be simple; our object contains one data field, called board, which is a matrix of observables (that is, an array of arrays of observables). Our constructor takes one matrix of numbers, and creates a matrix of observables from it. We also use the trick of saving the value of this into another variable, called self. Lines 14-20 below create this board.</p>
 
-<p>We also have a few other &#8216;methods&#8217;;</p>
+<p>Notice that observables look almost like normal variables, but they are actually functions; if you want to get the value, you need to evaluate the function, and if you want to change the value, you evaluate it with the new value as a parameter, so if you have an observable called a, using simply a gives you a function, using a() gives you its value and using a(3) would set the value inside a to 3 (roughly equivalent to a=3 :).</p>
+
+<p>We also have a few other &#8216;methods&#8217; in our model:</p>
 
 <ul>
 <li>flipSquare, which gets passed the row and column of a square and, if it&#8217;s a valid position, flips it (from 0 to 1 or from 1 to 0);</li>
@@ -247,7 +249,23 @@
 
 <h1>the html</h1>
 
-<p>The html will be relatively simple; it links to the css and</p>
+<p>The html will be relatively simple; it includes jquery (for document.ready) and knockout, and our model (loModel.js), and links to our css; its body defines a function to call when ready, which creates an instance of our model (passing it some sample data), and then calls ko.applyBindings, which does all the magic; our html will have data-bind attributes, that knockout processes.</p>
+
+<p>The html part just defines a table, with no header and a tbody. The tbody has a data-bind of <a href="http://knockoutjs.com/documentation/foreach-binding.html">foreach</a>: board, which means look inside the model, find a field called board (which should be an array), and then generate the html inside, for each one of the elements.</p>
+
+<p>Inside a foreach binding, you can use $data to refer to the actual element, $index to refer to its index, and, inside a nested foreach, $parentContext to refer to the context outside.</p>
+
+<p>So, inside our tbody, we put <tr> tags, with data-bind set to foreach: $data, which means our $data (the element inside the previous foreach) should be an array, and we&#8217;ll generate the html inside (the <td>) once for each element.</p>
+
+<p>Our <td> tags have the magic; we use two different data-binds:</p>
+
+<ul>
+<li>css which applies one or more css classes, depending on the condition (in this case, either a0 or a1, depending on the value stored in the board; notice our context is the nested foreach, so $data is the actual element on the board (0 or 1).</li>
+<li>click which specifies a function to call on a click; here we call the model&#8217;s buttonClicker function with row and column to generate the appropriate function; since we&#8217;re inside the nested foreach, $parentContext.$index() represents the row, and $index() the column.</li>
+</ul>
+
+
+<p>And that&#8217;s it ! isn&#8217;t knockout cool ?</p>
 </div>
 
 

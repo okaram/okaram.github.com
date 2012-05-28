@@ -4,7 +4,7 @@
   <title><![CDATA[Orlando's Blog]]></title>
   <link href="http://1qaz2wsx@github.com.github.com/atom.xml" rel="self"/>
   <link href="http://1qaz2wsx@github.com.github.com/"/>
-  <updated>2012-05-09T19:56:49-04:00</updated>
+  <updated>2012-05-28T12:47:42-04:00</updated>
   <id>http://1qaz2wsx@github.com.github.com/</id>
   <author>
     <name><![CDATA[Orlando Karam]]></name>
@@ -12,6 +12,21 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[A LightsOut game with knockoutjs]]></title>
+    <link href="http://1qaz2wsx@github.com.github.com/blog/2012/05/28/a-lightsout-game-with-knockoutjs/"/>
+    <updated>2012-05-28T12:29:00-04:00</updated>
+    <id>http://1qaz2wsx@github.com.github.com/blog/2012/05/28/a-lightsout-game-with-knockoutjs</id>
+    <content type="html"><![CDATA[<p>Lately I&#8217;ve been trying to learn javascript, and found <a href="http://knockoutjs.com">knockoutjs</a>, a declarative MVVM library; basically, it allows me to define a model, and dynamically changes my html as my model changes.</p>
+
+<p>One kind of application this makes easy is puzzle games, in which you have a rectangular matrix as a model for your board. One such game is <a href="http://en.wikipedia.org/wiki/Lights_Out_(game">Lights Out</a>), in which you have a matrix of lights and you try to turn them all off.</p>
+
+<p>In knockout applications, you need to build your model (well, they call them ViewModels), which are normal javascript objects, but they contain <a href="http://knockoutjs.com/documentation/observables.html">observables</a>; you&#8217;d later bind this model to your html, and changing the value of your observable will be automatically reflected on the model.</p>
+
+<p>File /home/curri/octopress/source/downloads/code/knockLights/loModel.css could not be found</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[test]]></title>

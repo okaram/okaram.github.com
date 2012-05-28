@@ -95,11 +95,123 @@
 
   <div class="entry-content"><p>Lately I&#8217;ve been trying to learn javascript, and found <a href="http://knockoutjs.com">knockoutjs</a>, a declarative MVVM library; basically, it allows me to define a model, and dynamically changes my html as my model changes.</p>
 
-<p>One kind of application this makes easy is puzzle games, in which you have a rectangular matrix as a model for your board. One such game is <a href="http://en.wikipedia.org/wiki/Lights_Out_(game">Lights Out</a>), in which you have a matrix of lights and you try to turn them all off.</p>
+<p>One kind of application this makes easy is puzzle games, in which you have a rectangular matrix as a model for your board. One such game is <a href="http://en.wikipedia.org/wiki/Lights_Out_(game)">Lights Out</a>, in which you have a matrix of lights and you try to turn them all off.</p>
 
 <p>In knockout applications, you need to build your model (well, they call them ViewModels), which are normal javascript objects, but they contain <a href="http://knockoutjs.com/documentation/observables.html">observables</a>; you&#8217;d later bind this model to your html, and changing the value of your observable will be automatically reflected on the model.</p>
 
-<p>File /home/curri/octopress/source/downloads/code/knockLights/loModel.css could not be found</p>
+<figure class='code'><figcaption><span> (loModel.js)</span> <a href='/downloads/code/knockLights/loModel.js'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">board1</span><span class="o">=</span><span class="p">[</span>
+</span><span class='line'>  <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+</span><span class='line'>  <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+</span><span class='line'>  <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+</span><span class='line'>  <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+</span><span class='line'>  <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+</span><span class='line'><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Overall viewmodel for this screen, along with initial state</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">LightsOutViewModel</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="o">=</span><span class="p">[];</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">row</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">row</span><span class="o">&lt;</span><span class="nx">b</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">row</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">oa</span><span class="o">=</span><span class="p">[]</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">col</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">col</span><span class="o">&lt;</span><span class="nx">b</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span> <span class="nx">col</span><span class="p">)</span>
+</span><span class='line'>          <span class="nx">oa</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">ko</span><span class="p">.</span><span class="nx">observable</span><span class="p">(</span><span class="nx">b</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nx">col</span><span class="p">]))</span>
+</span><span class='line'>      <span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">oa</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nx">self</span><span class="p">.</span><span class="nx">flipSquare</span> <span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span><span class="nx">col</span><span class="p">){</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">row</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">row</span><span class="o">&lt;</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">.</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="nx">col</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">col</span><span class="o">&lt;</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">)</span>
+</span><span class='line'>      <span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nx">col</span><span class="p">]</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nx">col</span><span class="p">]());</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="nx">self</span><span class="p">.</span><span class="nx">showAll</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">alert</span><span class="p">(</span><span class="nx">ko</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">(</span><span class="nx">self</span><span class="p">));</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">self</span><span class="p">.</span><span class="nx">btnClicker</span>  <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="nx">col</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">self</span><span class="p">.</span><span class="nx">flipSquare</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span><span class="nx">col</span><span class="p">);</span>
+</span><span class='line'>          <span class="nx">self</span><span class="p">.</span><span class="nx">flipSquare</span><span class="p">(</span><span class="nx">row</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="nx">col</span><span class="p">);</span>
+</span><span class='line'>          <span class="nx">self</span><span class="p">.</span><span class="nx">flipSquare</span><span class="p">(</span><span class="nx">row</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="nx">col</span><span class="p">);</span>
+</span><span class='line'>          <span class="nx">self</span><span class="p">.</span><span class="nx">flipSquare</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span><span class="nx">col</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>          <span class="nx">self</span><span class="p">.</span><span class="nx">flipSquare</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span><span class="nx">col</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>          <span class="k">if</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">allSet</span><span class="p">())</span> <span class="p">{</span>
+</span><span class='line'>              <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;great job !&#39;</span><span class="p">);</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nx">self</span><span class="p">.</span><span class="nx">allSet</span><span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">row</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">row</span><span class="o">&lt;</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">row</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">col</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">col</span><span class="o">&lt;</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span> <span class="nx">col</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>              <span class="k">if</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nx">col</span><span class="p">]()</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>                  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
 </div>
   
   

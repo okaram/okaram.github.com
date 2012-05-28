@@ -95,9 +95,22 @@
 
   <div class="entry-content"><p>Lately I&#8217;ve been trying to learn javascript, and found <a href="http://knockoutjs.com">knockoutjs</a>, a declarative MVVM library; basically, it allows me to define a model, and dynamically changes my html as my model changes.</p>
 
-<p>One kind of application this makes easy is puzzle games, in which you have a rectangular matrix as a model for your board. One such game is <a href="http://en.wikipedia.org/wiki/Lights_Out_(game)">Lights Out</a>, in which you have a matrix of lights and you try to turn them all off.</p>
+<p>One kind of application this makes easy is puzzle games, in which you have a rectangular matrix as a model for your board. One such game is <a href="http://en.wikipedia.org/wiki/Lights_Out_(game)">Lights Out</a>, in which you have a matrix of lights and you try to turn them all off. You may want to <a href="/downloads/code/knockLights/lightsOut.html">check it out</a> first, and then continue with the tutorial.</p>
 
 <p>In knockout applications, you need to build your model (well, they call them ViewModels), which are normal javascript objects, but they contain <a href="http://knockoutjs.com/documentation/observables.html">observables</a>; you&#8217;d later bind this model to your html, and changing the value of your observable will be automatically reflected on the model.</p>
+
+<p>Our model will be simple; our object contains one data field, called board, which is a matrix of observables (that is, an array of arrays of observables). Our constructor takes one matrix of numbers, and creates a matrix of observables from it. We also use the trick of saving the value of this into another variable, called self. Lines 14-20 below create this board.</p>
+
+<p>We also have a few other &#8216;methods&#8217;;</p>
+
+<ul>
+<li>flipSquare, which gets passed the row and column of a square and, if it&#8217;s a valid position, flips it (from 0 to 1 or from 1 to 0);</li>
+<li>allSet, which returns true if you&#8217;ve solved the puzzle (have all 0s on the board, turned off all the lights), false otherwise</li>
+<li>btnClicker, which will be called whenever somebody clicks in a cell, and it just flips the 5 corresponding cells (the one clicked, above, below, left, right; notice that flipSquare already checks that positions are valid, so we do not need to check here), and then checks if you&#8217;ve solved the puzzle.</li>
+</ul>
+
+
+<p>Below is the javascript file for the model</p>
 
 <figure class='code'><figcaption><span> (loModel.js)</span> <a href='/downloads/code/knockLights/loModel.js'>download</a></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -147,13 +160,6 @@
 <span class='line-number'>45</span>
 <span class='line-number'>46</span>
 <span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
 </pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">board1</span><span class="o">=</span><span class="p">[</span>
 </span><span class='line'>  <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
 </span><span class='line'>  <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
@@ -176,13 +182,17 @@
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'>  
 </span><span class='line'>  <span class="nx">self</span><span class="p">.</span><span class="nx">flipSquare</span> <span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span><span class="nx">col</span><span class="p">){</span>
-</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">row</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">row</span><span class="o">&lt;</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">.</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="nx">col</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">col</span><span class="o">&lt;</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">)</span>
-</span><span class='line'>      <span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nx">col</span><span class="p">]</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nx">col</span><span class="p">]());</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="nx">row</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">row</span><span class="o">&lt;</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">.</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="nx">col</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">col</span><span class="o">&lt;</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">)</span>
+</span><span class='line'>          <span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nx">col</span><span class="p">]</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nx">col</span><span class="p">]());</span>
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'>  
-</span><span class='line'>    <span class="nx">self</span><span class="p">.</span><span class="nx">showAll</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">alert</span><span class="p">(</span><span class="nx">ko</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">(</span><span class="nx">self</span><span class="p">));</span>
-</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="nx">self</span><span class="p">.</span><span class="nx">allSet</span><span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">row</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">row</span><span class="o">&lt;</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">row</span><span class="p">)</span>
+</span><span class='line'>          <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">col</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">col</span><span class="o">&lt;</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span> <span class="nx">col</span><span class="p">)</span>
+</span><span class='line'>              <span class="k">if</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nx">col</span><span class="p">]()</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>                  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="nx">self</span><span class="p">.</span><span class="nx">btnClicker</span>  <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="nx">col</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>      <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
@@ -196,17 +206,6 @@
 </span><span class='line'>          <span class="p">}</span>
 </span><span class='line'>      <span class="p">}</span>
 </span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  
-</span><span class='line'>  <span class="nx">self</span><span class="p">.</span><span class="nx">allSet</span><span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">row</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">row</span><span class="o">&lt;</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">row</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>          <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">col</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">col</span><span class="o">&lt;</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span> <span class="nx">col</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>              <span class="k">if</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">board</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nx">col</span><span class="p">]()</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>                  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-</span><span class='line'>          <span class="p">}</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 

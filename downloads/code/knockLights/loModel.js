@@ -20,13 +20,17 @@ function LightsOutViewModel(b) {
 	}
 	
 	self.flipSquare =function(row,col){
-	if(row>=0 && row<self.board.length && col>=0 && col<self.board[0].length)
-		self.board[row][col] (1-self.board[row][col]());
+		if(row>=0 && row<self.board.length && col>=0 && col<self.board[0].length)
+			self.board[row][col] (1-self.board[row][col]());
 	}
 	
-    self.showAll = function() {
-        alert(ko.toJSON(self));
-    }
+	self.allSet= function() {
+		for(var row=0; row<self.board.length; ++row) 
+			for(var col=0; col<self.board[0].length; ++ col) 
+				if(self.board[row][col]()==1)
+					return false;
+		return true;
+	}
 
 	self.btnClicker  = function(row, col) {
 		return function(item) {
@@ -40,16 +44,4 @@ function LightsOutViewModel(b) {
 			}
 		}
 	}
-	
-	self.allSet= function() {
-		for(var row=0; row<self.board.length; ++row) {
-			for(var col=0; col<self.board[0].length; ++ col) {
-				if(self.board[row][col]()==1)
-					return false;
-			}
-		}
-		return true;
-	}
-    
 }
-

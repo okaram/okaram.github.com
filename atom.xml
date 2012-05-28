@@ -4,7 +4,7 @@
   <title><![CDATA[Orlando's Blog]]></title>
   <link href="http://1qaz2wsx@github.com.github.com/atom.xml" rel="self"/>
   <link href="http://1qaz2wsx@github.com.github.com/"/>
-  <updated>2012-05-28T13:11:34-04:00</updated>
+  <updated>2012-05-28T13:43:49-04:00</updated>
   <id>http://1qaz2wsx@github.com.github.com/</id>
   <author>
     <name><![CDATA[Orlando Karam]]></name>
@@ -23,6 +23,8 @@
 <p>One kind of application this makes easy is puzzle games, in which you have a rectangular matrix as a model for your board. One such game is <a href="http://en.wikipedia.org/wiki/Lights_Out_(game)">Lights Out</a>, in which you have a matrix of lights and you try to turn them all off. You may want to <a href="http://1qaz2wsx@github.com.github.com/downloads/code/knockLights/lightsOut.html">check it out</a> first, and then continue with the tutorial.</p>
 
 <p>In knockout applications, you need to build your model (well, they call them ViewModels), which are normal javascript objects, but they contain <a href="http://knockoutjs.com/documentation/observables.html">observables</a>; you&#8217;d later bind this model to your html, and changing the value of your observable will be automatically reflected on the model.</p>
+
+<h1>The model (javascript)</h1>
 
 <p>Our model will be simple; our object contains one data field, called board, which is a matrix of observables (that is, an array of arrays of observables). Our constructor takes one matrix of numbers, and creates a matrix of observables from it. We also use the trick of saving the value of this into another variable, called self. Lines 14-20 below create this board.</p>
 
@@ -136,6 +138,44 @@
 
 
 <p></p>
+
+<h1>The css</h1>
+
+<p>To make it simple, the board will be a table, with empty cells, and we&#8217;ll change the background color of the cell to mark whether the light is on or off on that cell. So, our css just defines width and height for table cells (so they appear, even when empty), and then two css classes, called a0 and a1, with different background colors (blue for a0, green for a1)</p>
+
+<figure class='code'><figcaption><span> (lo.css)</span> <a href='http://1qaz2wsx@github.com.github.com/downloads/code/knockLights/lo.css'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nt">td</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">width</span><span class="o">:</span> <span class="m">50px</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">height</span><span class="o">:</span> <span class="m">50px</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.a1</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">background-color</span><span class="o">:</span> <span class="m">#00FF00</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.a0</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">background-color</span><span class="o">:</span> <span class="m">#0000FF</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<h1>the html</h1>
+
+<p>The html will be relatively simple; it links to the css and</p>
 ]]></content>
   </entry>
   
